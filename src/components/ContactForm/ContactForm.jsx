@@ -1,5 +1,5 @@
 import React from 'react';
-import { nanoid } from 'nanoid';
+
 import { useState } from 'react';
 import { AiOutlinePhone } from 'react-icons/ai';
 import { AiOutlineUserAdd } from 'react-icons/ai';
@@ -12,42 +12,43 @@ import {
   Button,
 } from './ContactForm.styled.jsx';
 
-export function ContactForm({ onSubmit }) {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const [id, setId] = useState('');
+import { useDispatch } from "react-redux";
+import { addContact } from 'redux/contactsSlice.js';
+import { nanoid } from '@reduxjs/toolkit';
 
-  //id
-  const nameId = nanoid();
+//================================================================
+export function ContactForm() {
+
+const dispatch = useDispatch();
+
+const [name, setName] = useState('');
+const [number, setNumber] = useState('');
+
+
+
 
   //---- Опрацювання полів форми -----
   const handleNameChange = evt => {
-    setName(evt.target.value);
-    setId(nameId);
+    console.log(evt.currentTarget.value)
+    setName(evt.currentTarget.value);
+
+    // setId(nameId);
   };
   const handleNumberChange = evt => {
     setNumber(evt.target.value);
   };
-  //   const handleChange = event => {
-
-  // switch(event.target.name) {
-  //   case 'name':
-  //     setName(event.target.value);
-  //     setId(nameId)
-  //     break;
-  //     case 'number':
-  //       setNumber(event.target.value);
-  //       break;
-  //       default:
-  //       return;
-  // }
-  //   }
 
   //---- Опрацювання форми -----
   const handleSubmit = evt => {
     evt.preventDefault();
     //Виклик функції  Submit
-    onSubmit({ id: id, name: name, number: number });
+    const contact = {
+      id: nanoid(), 
+      name: name, 
+      number: number,
+    }
+    dispatch(addContact(contact))
+
     // Очишення
     setName('');
     setNumber('');
@@ -55,13 +56,13 @@ export function ContactForm({ onSubmit }) {
 
   return (
     <SearchFormStyled onSubmit={handleSubmit}>
-      <LabelName htmlFor={id}>
+      <LabelName>
         <AiOutlineUserAdd />
         Name
         <InputName
           type="text"
           name="name"
-          value={name}
+          // value={name}
           onChange={handleNameChange}
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
@@ -74,7 +75,7 @@ export function ContactForm({ onSubmit }) {
         <InputNumber
           type="tel"
           name="number"
-          value={number}
+          // value={number}
           onChange={handleNumberChange}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
@@ -86,3 +87,6 @@ export function ContactForm({ onSubmit }) {
     </SearchFormStyled>
   );
 }
+
+
+

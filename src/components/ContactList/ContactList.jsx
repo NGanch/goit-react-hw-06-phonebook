@@ -8,17 +8,25 @@ import {
   ContactsNumber,
   Button,
 } from './ContactList.styled';
-export const ContactList = ({ contacts, onDeleteContact }) => {
-  return (
+import { useDispatch, useSelector } from "react-redux";
+import { selectContacts, selectFilter } from "../../redux/selectors";
+import { deleteContact } from '../../redux/contactsSlice';
+
+export const ContactList = () => {
+  const dispatch = useDispatch();
+  const contact = useSelector(selectContacts);
+  const filter =  useSelector(selectFilter);
+  const visibleContact = contact.filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()))
+   return (
     <ContactsList>
-      {contacts.map(({ id, name, number }) => (
+      {visibleContact.map(({ id, name, number }) => (
         <ContactsItem key={id}>
           <AiOutlinePhone color="rgb(73, 136, 195)" />
           <ContactsName>
             {name}:<ContactsNumber>{number}</ContactsNumber>
           </ContactsName>
-          <Button type="submit" onClick={() => onDeleteContact(id)}>
-            {' '}
+          <Button type="button" onClick={() => dispatch(deleteContact(id))}>
+            {' '} 
             Delete <AiOutlineUserDelete align-self="center" />
           </Button>
         </ContactsItem>
@@ -26,3 +34,4 @@ export const ContactList = ({ contacts, onDeleteContact }) => {
     </ContactsList>
   );
 };
+
