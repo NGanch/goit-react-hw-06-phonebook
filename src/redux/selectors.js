@@ -1,2 +1,5 @@
-export const selectContacts = state => state.contacts.contacts;
-export const selectFilter = state => state.filter;
+// Повертаємо список контактів зі стану
+export const getContacts = state => state.contacts.items;
+
+// Повертаємо знгачення фільтру зі стану
+export const getFilter = state => state.filter;

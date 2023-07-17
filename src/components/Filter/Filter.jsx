@@ -1,18 +1,24 @@
-import { useDispatch, useSelector } from 'react-redux';
+// Імпортуємо хуки useSelector, useDispatch
+import { useSelector, useDispatch } from 'react-redux';
+import { setFilter } from 'redux/filterSlice';
+import { getFilter } from 'redux/selectors';
 import { FilterLabel, FilterInput } from './Filter.styled';
-import { selectFilter } from 'redux/selectors';
-import { updateFilter } from 'redux/filterSlice';
 
-export const Filter = () => {
+export function Filter() {
+  // Отримуємо значення фільтру зі стану
+  const filter = useSelector(getFilter);
+
   const dispatch = useDispatch();
-const filter = useSelector(selectFilter); 
-    const changeFilter = evt => {
- dispatch(updateFilter(evt.target.value))
+
+  // Зміна значення фільтру
+  const handleFilterChange = event => {
+    dispatch(setFilter(event.target.value));
   };
+
   return (
     <FilterLabel>
       Find contacts by name
-      <FilterInput type="text" value={filter} onChange={changeFilter} />
+      <FilterInput type="text" value={filter} onChange={handleFilterChange} />
     </FilterLabel>
   );
-}; 
+}

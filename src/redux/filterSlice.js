@@ -1,15 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+//=====================================
+import { createSlice } from '@reduxjs/toolkit';
 
+// Початкове значення фільтру
+const filterInitialState = '';
+
+// Створення slice фільтру за допомогою createSlice
 const filterSlice = createSlice({
+  // Ім'я slice фільтру
   name: 'filter',
-  initialState: '',
+  // Початковий стан фільтру
+  initialState: filterInitialState,
+  // Reducers
   reducers: {
-    updateFilter(state, action) {
-        return state = action.payload;
-      },   
+    // Зміна значення фільтру
+    setFilter(state, action) {
+      return (state = action.payload);
     },
   },
-);
+});
 
-export const { updateFilter } = filterSlice.actions;
-export default filterSlice.reducer;
+// Експортуємо actions з filterSlice
+export const { setFilter } = filterSlice.actions;
+// Експортуємо reducer з filterSlice
+export const filterReducer = filterSlice.reducer;

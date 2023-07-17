@@ -1,40 +1,36 @@
-
-//====================================
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 import {
   persistStore,
-  persistReducer,
   FLUSH,
   REHYDRATE,
   PAUSE,
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage';
-import rootReducer from './contactsSlice';
-import filtersReducer from './filterSlice';
+} from 'redux-persist';
+import { contactsReducer } from './contactsSlice';
+import { filterReducer } from './filterSlice';
 
-
-const persistConfig = {
-  key: 'contacts',
-  version: 1,
-  storage,
-}
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
+// Створення state-configureStore Redux
 export const store = configureStore({
   reducer: {
-    contacts: persistedReducer,
-    filter: filtersReducer
+    // Reducer для управління станом контактів
+    contacts: contactsReducer,
+    // Reducer для управління станом фільтру
+    filter: filterReducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  // Застосування middleware за допомогою getDefaultMiddleware
+  // для ігнорування окремих Actions
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-})
+});
 
-export const persistor = persistStore(store)
+// Створення персистентного сховища === localStorage
+export const persistor = persistStore(store);
+//====================================
+
+

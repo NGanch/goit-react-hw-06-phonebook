@@ -8,25 +8,34 @@ import {
   ContactsNumber,
   Button,
 } from './ContactList.styled';
-import { useDispatch, useSelector } from "react-redux";
-import { selectContacts, selectFilter } from "../../redux/selectors";
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, getFilter } from 'redux/selectors';
 import { deleteContact } from '../../redux/contactsSlice';
 
 export const ContactList = () => {
+  // Отримуємо список контактів
+  const contacts = useSelector(getContacts);
+  // Отримуємо значення фільтру
+  const filter = useSelector(getFilter);
+
   const dispatch = useDispatch();
-  const contact = useSelector(selectContacts);
-  const filter =  useSelector(selectFilter);
-  const visibleContact = contact.filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()))
-   return (
+
+  // Фільтровані контакти
+  const filteredContacts = contacts.filter(({ name }) =>
+    name.toLowerCase().includes(filter.toLowerCase())
+  );
+  // Видалення контакту
+  const handleContactDelete = contactID => dispatch(deleteContact(contactID));
+  
+  return (
     <ContactsList>
-      {visibleContact.map(({ id, name, number }) => (
+      {filteredContacts.map(({ id, name, number }) => (
         <ContactsItem key={id}>
           <AiOutlinePhone color="rgb(73, 136, 195)" />
           <ContactsName>
             {name}:<ContactsNumber>{number}</ContactsNumber>
           </ContactsName>
-          <Button type="button" onClick={() => dispatch(deleteContact(id))}>
-            {' '} 
+          <Button type="button" onClick={() => handleContactDelete(id)}>
             Delete <AiOutlineUserDelete align-self="center" />
           </Button>
         </ContactsItem>
@@ -34,4 +43,3 @@ export const ContactList = () => {
     </ContactsList>
   );
 };
-
